@@ -3,6 +3,8 @@ package umc.domain.review.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import umc.domain.member.entity.Member;
+import umc.domain.store.entity.Store;
 import umc.global.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -32,4 +34,12 @@ public class Review extends BaseEntity {
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewImage> images = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="store_id")
+    private Store store;
 }

@@ -1,10 +1,11 @@
 package umc.domain.member.entity;
 import jakarta.persistence.*;
 import lombok.*;
+import umc.domain.Region.entity.Region;
 import umc.domain.member.enums.Gender;
 import umc.domain.member.enums.SocialType;
 import umc.global.BaseEntity;
-import umc.global.enums.Address;
+
 
 
 import java.time.LocalDate;
@@ -32,9 +33,9 @@ public class Member extends BaseEntity {
     @Column(name="birth")
     private LocalDate birth;
 
-    @Column(name="address")
-    @Enumerated(EnumType.STRING)
-    private Address address;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id")
+    private Region region;
 
     @Column(name="detail_address", length = 100)
     private String detailAddress;

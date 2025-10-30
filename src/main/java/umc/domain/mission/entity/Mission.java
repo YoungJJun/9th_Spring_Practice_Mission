@@ -2,6 +2,7 @@ package umc.domain.mission.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import umc.domain.store.entity.Store;
 import umc.global.BaseEntity;
 
 import java.time.LocalDate;
@@ -29,5 +30,7 @@ public class Mission extends BaseEntity {
     @Column(name="reward", nullable=false) //point
     private int reward;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="store_id")
+    private Store store;
 }

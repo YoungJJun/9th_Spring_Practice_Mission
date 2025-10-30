@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import umc.domain.store.enums.DayOfWeek;
 import umc.global.BaseEntity;
-import umc.global.enums.Address;
+
 
 import java.time.LocalTime;
 

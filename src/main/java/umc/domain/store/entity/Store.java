@@ -3,8 +3,9 @@ package umc.domain.store.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import umc.domain.Region.entity.Region;
 import umc.global.BaseEntity;
-import umc.global.enums.Address;
+
 
 @Entity
 @Builder
@@ -26,9 +27,9 @@ public class Store extends BaseEntity {
     @Column(name="owner_number", nullable = false, length = 50)
     private String ownerNumber;
 
-    @Column(name="address", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Address address;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id", nullable = false)
+    private Region region;
 
     @Column(name="detail_address", nullable = true, length = 100)
     private String detailAddress;
