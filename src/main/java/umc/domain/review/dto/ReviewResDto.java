@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-public class ReviewResponseDto {
+public class ReviewResDto {
 
     private Long reviewId;
     private String content;

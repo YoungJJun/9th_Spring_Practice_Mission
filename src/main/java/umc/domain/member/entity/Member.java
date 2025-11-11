@@ -55,7 +55,7 @@ public class Member extends BaseEntity {
     private String email;
 
     @Column(name="phone_number", nullable = false, length = 20, unique = true)
-    private String phone_number;
+    private String phoneNumber;
 
     @Column(name="password", nullable = false, length = 255)
     private String password;
