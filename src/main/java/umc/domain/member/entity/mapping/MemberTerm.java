@@ -3,9 +3,8 @@ package umc.domain.member.entity.mapping;
 
 import jakarta.persistence.*;
 import lombok.*;
-import umc.domain.member.entity.Category;
 import umc.domain.member.entity.Member;
-import umc.domain.member.entity.Term;
+import umc.domain.term.entity.Term;
 
 @Entity
 @Builder

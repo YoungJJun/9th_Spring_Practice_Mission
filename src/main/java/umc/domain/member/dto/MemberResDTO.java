@@ -2,9 +2,10 @@ package umc.domain.member.dto;
 
 import lombok.Builder;
 
+import java.time.LocalDateTime;
 
 
-public class MemberResDto {
+public class MemberResDTO {
 
     @Builder
     public record MyPageMemberDto(
@@ -14,6 +15,11 @@ public class MemberResDto {
             Integer point
     ) {}
 
+    @Builder
+    public record JoinDTO(
+            Long memberId,
+            LocalDateTime createdAt
+    ){}
 
 
 }

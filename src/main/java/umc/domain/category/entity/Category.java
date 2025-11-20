@@ -1,19 +1,19 @@
-package umc.domain.member.entity;
+package umc.domain.category.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import umc.domain.member.enums.TermName;
+import umc.domain.member.enums.FoodCategory;
 import umc.global.BaseEntity;
 
-
 @Entity
-@Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 @Getter
-@Table(name="term")
+@Table(name="category")
 
-public class Term extends BaseEntity {
+
+public class Category extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +21,6 @@ public class Term extends BaseEntity {
 
     @Column(name="name", nullable = false, unique = true)
     @Enumerated(EnumType.STRING)
-    private TermName name;
+    private FoodCategory name;
 
 }

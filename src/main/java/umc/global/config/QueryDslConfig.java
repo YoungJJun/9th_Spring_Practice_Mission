@@ -1,4 +1,4 @@
-package umc.global;
+package umc.global.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

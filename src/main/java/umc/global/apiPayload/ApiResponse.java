@@ -14,7 +14,7 @@ import umc.global.apiPayload.code.BaseSuccessCode;
 public class ApiResponse<T> {
 
     @JsonProperty("isSuccess")
-    private final boolean isSuccess;
+    private final boolean success;
 
     @JsonProperty("code")
     private final String code;

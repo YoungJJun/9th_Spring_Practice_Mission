@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @AllArgsConstructor
-public class ReplyDto {
+public class ReviewReplyDto {
 
     private Long replyId;          // 답글 ID
     private String content;        // 답글 내용

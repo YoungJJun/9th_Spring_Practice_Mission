@@ -40,10 +40,10 @@ public class Member extends BaseEntity {
     @Column(name="detail_address", length = 100)
     private String detailAddress;
 
-    @Column(name="social_uid", nullable = false)
+    @Column(name="social_uid")
     private String socialUid;
 
-    @Column(name="social_type", nullable = false)
+    @Column(name="social_type")
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
@@ -54,14 +54,15 @@ public class Member extends BaseEntity {
     @Column(name="email", nullable = false, length = 50, unique = true)
     private String email;
 
-    @Column(name="phone_number", nullable = false, length = 20, unique = true)
+    @Column(name="phone_number", length = 20, unique = true)
     private String phoneNumber;
 
-    @Column(name="password", nullable = false, length = 255)
+    @Column(name="password", length = 255)
     private String password;
 
-    @Column(name="nickname", nullable = false, length = 30, unique = true)
+    @Column(name="nickname", length = 30, unique = true)
     private String nickname;
+
 
 
 }

@@ -20,16 +20,18 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/me")
-    public ApiResponse<List<ReviewResDto>> getMyDetailedReviews(
+    public ApiResponse<List<ReviewResDto.Detail>> getMyDetailedReviews(
             //@AuthenticationPrincipal MemberDetails member (이후에 토큰에서 멤버 받아올 때 사용)
             //Long memberId = member.getMember().getId(); (받아온 멤버로부터 id 받아오기)
             @RequestParam(required = true)  Long memberId,
             @RequestParam(required = false) Long storeId,
             @RequestParam(required = false) Integer ratingFilter) {
 
-        List<ReviewResDto> reviews =
+        List<ReviewResDto.Detail> reviews =
                 reviewService.getDetailedReviews(memberId, storeId, ratingFilter);
 
         return ApiResponse.onSuccess(GeneralSuccessCode.OK, reviews);
     }
+
+
 }

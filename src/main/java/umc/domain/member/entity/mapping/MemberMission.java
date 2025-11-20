@@ -13,6 +13,8 @@ import umc.domain.mission.entity.Mission;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Table(name="member_mission")
+
+
 public class MemberMission {
 
     @Id
@@ -30,4 +32,8 @@ public class MemberMission {
     @Column(name="status")
     @Enumerated(EnumType.STRING)
     private MissionStatus status;
+
+    public void updateStatus(MissionStatus status) {
+        this.status = status;
+    }
 }

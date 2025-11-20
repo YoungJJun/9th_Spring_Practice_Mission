@@ -3,8 +3,11 @@ package umc.domain.mission.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.*;
 import org.springframework.stereotype.Repository;
+import umc.domain.Region.entity.QRegion;
 import umc.domain.member.enums.MissionStatus;
 import umc.domain.mission.entity.Mission;
+import umc.domain.mission.entity.QMission;
+import umc.domain.store.entity.QStore;
 
 import java.util.List;
 
@@ -19,12 +22,15 @@ public class MissionQueryDslImpl implements MissionQueryDsl {
 
     @Override
     public int countCompletedMissionMod10(Long memberId, Long regionId) {
+
+        QStore store = QStore.store;
+        QRegion region = QRegion.region;
         Long count = queryFactory
                 .select(memberMission.count())
                 .from(memberMission)
                 .join(memberMission.mission, mission)
-                .join(mission.store, mission.store) // store join
-                .join(mission.store.region, mission.store.region)
+                .join(mission.store, store) // store join
+                .join(store.region, region)
                 .where(
                         memberMission.member.id.eq(memberId),
                         mission.store.region.id.eq(regionId),
@@ -37,10 +43,14 @@ public class MissionQueryDslImpl implements MissionQueryDsl {
 
     @Override
     public List<Mission> findAvailableMissionByMemberAndRegion(Long memberId, Long regionId) {
+
+        QStore store = QStore.store;
+        QRegion region = QRegion.region;
+
         return queryFactory
                 .selectFrom(mission)
-                .join(mission.store).fetchJoin()
-                .join(mission.store.region).fetchJoin()
+                .join(mission.store, store).fetchJoin()
+                .join(store.region, region).fetchJoin()
                 .leftJoin(memberMission)
                 .on(
                         memberMission.mission.eq(mission),

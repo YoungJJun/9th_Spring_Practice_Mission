@@ -3,7 +3,7 @@ package umc.domain.member.entity.mapping;
 
 import jakarta.persistence.*;
 import lombok.*;
-import umc.domain.member.entity.Category;
+import umc.domain.category.entity.Category;
 import umc.domain.member.entity.Member;
 
 @Entity
