@@ -48,7 +48,7 @@ public class ReviewService {
 
     }
 
-    public ReviewResDto.Detail createReview(ReviewReqDto.Create dto,Long storeId) {
+    public ReviewResDto.Detail createReview(ReviewReqDto.ReviewCreate dto, Long storeId) {
 
         // !!!! 이후에 멤버ID 꺼내와서 수행, validation 검증 책임 분리 필요 !!!!
         Long userId = 1L;

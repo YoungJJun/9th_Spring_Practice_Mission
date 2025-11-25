@@ -42,7 +42,7 @@ public class ReviewConverter {
     }
 
     //ReviewReqDto.Create -> Review
-    public static Review toReview(ReviewReqDto.Create dto, Store store, Member member) {
+    public static Review toReview(ReviewReqDto.ReviewCreate dto, Store store, Member member) {
         return Review.builder()
                 .content(dto.content())
                 .rating(dto.rating())
@@ -61,7 +61,7 @@ public class ReviewConverter {
                         .map(ReviewConverter::toReviewPreviewDTO)
                         .toList()
                 )
-                .listSize(result.getSize())
+                .listSize(result.getNumberOfElements())
                 .totalPage(result.getTotalPages())
                 .totalElements(result.getTotalElements())
                 .isFirst(result.isFirst())
@@ -79,4 +79,6 @@ public class ReviewConverter {
                 .createdAt(LocalDate.from(review.getCreatedAt()))
                 .build();
     }
+
+
 }

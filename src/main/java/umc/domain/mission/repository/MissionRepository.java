@@ -1,5 +1,7 @@
 package umc.domain.mission.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +17,7 @@ public interface MissionRepository extends JpaRepository<Mission, Long> ,Mission
         WHERE mm.member.id=:memberId
           AND mm.status = 'COMPLETED'
     """)
-    List<Mission> findCompletedMissionByMemberId(@Param("memberId") Long memberId);
+    Page<Mission> findCompletedMissionByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
     //내가 진행중인 미션 모아서 보기위한 쿼리
     @Query("""
@@ -23,7 +25,8 @@ public interface MissionRepository extends JpaRepository<Mission, Long> ,Mission
         WHERE mm.member.id=:memberId
           AND mm.status = 'IN_PROGRESS'
     """)
-    List<Mission> findInProgressMissionByMemberId(@Param("memberId") Long memberId);
+    Page<Mission> findInProgressMissionByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
 
+    Page<Mission> findByStoreId(Long storeId, Pageable pageable);
 }

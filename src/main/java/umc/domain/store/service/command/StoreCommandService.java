@@ -6,6 +6,6 @@ import umc.domain.store.dto.StoreResDto;
 
 public interface StoreCommandService {
     public StoreResDto.Create createStore(
-            StoreReqDto.Create dto
+            StoreReqDto.StoreCreate dto
     );
 }

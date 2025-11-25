@@ -24,7 +24,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     @Transactional
     @Override
     public StoreResDto.Create createStore(
-            StoreReqDto.Create dto
+            StoreReqDto.StoreCreate dto
     ) {
         //지역 찾기 (store에 연결필요) !!!! valid로 구현 분리해야 함 !!!!!
         Region region = regionRepository.findById(dto.regionId())

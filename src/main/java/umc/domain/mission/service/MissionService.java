@@ -1,12 +1,20 @@
 package umc.domain.mission.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import umc.domain.member.converter.MemberMissionConverter;
 import umc.domain.member.dto.MemberMissionResDto;
 import umc.domain.member.entity.Member;
 import umc.domain.member.entity.mapping.MemberMission;
 import umc.domain.member.enums.MissionStatus;
+import umc.domain.member.exception.MemberException;
+import umc.domain.member.exception.MemberMissionException;
+import umc.domain.member.exception.code.MemberErrorCode;
+import umc.domain.member.exception.code.MemberMissionErrorCode;
 import umc.domain.member.repository.MemberMissionRepository;
 import umc.domain.member.repository.MemberRepository;
 import umc.domain.mission.converter.MissionConverter;
@@ -17,9 +25,10 @@ import umc.domain.mission.exception.MissionException;
 import umc.domain.mission.exception.code.MissionErrorCode;
 import umc.domain.mission.repository.MissionRepository;
 import umc.domain.store.entity.Store;
+import umc.domain.store.exception.StoreException;
+import umc.domain.store.exception.code.StoreErrorCode;
 import umc.domain.store.repository.StoreRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,23 +40,30 @@ public class MissionService {
     private final MemberMissionRepository memberMissionRepository;
     private final MemberRepository memberRepository;
 
-    public List<MissionResDto.SimpleMissionDto> getCompletedMissionsByMemberId(Long memberId) {
-        return missionRepository.findCompletedMissionByMemberId(memberId)
-                .stream()
-                .map(MissionConverter::toSimpleMissionDto)
-                .toList();
+    public MissionResDto.MissionPreviewListDTO getMyCompletedMissions(Long memberId, int page, int size) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        Pageable pageable = PageRequest.of(page-1, size);
+
+        Page<Mission> missions = missionRepository.findCompletedMissionByMemberId(memberId, pageable);
+        return MissionConverter.toMissionPreviewListDTO(missions);
     }
 
-    public List<MissionResDto.SimpleMissionDto> getInProgressMissionsByMemberId(Long memberId) {
-        return missionRepository.findInProgressMissionByMemberId(memberId)
-                .stream()
-                .map(MissionConverter::toSimpleMissionDto)
-                .toList();
+    public MissionResDto.MissionPreviewListDTO getMyInProgressMissions(Long memberId, int page, int size) {
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        Pageable pageable = PageRequest.of(page-1, size);
+
+        Page<Mission> missions = missionRepository.findInProgressMissionByMemberId(memberId, pageable);
+        return MissionConverter.toMissionPreviewListDTO(missions);
     }
 
     public MissionResDto.SimpleMissionDto createMission(
             Long storeId,
-            MissionReqDto.create dto
+            MissionReqDto.CreateMission dto
     ){
         // !!!!! 여기서는 getRef 성능이득 없어보여서 수정해도 될 것 같음 !!!!!
         Store store = storeRepository.getReferenceById(storeId);
@@ -116,4 +132,40 @@ public class MissionService {
         throw new MissionException(MissionErrorCode.INVALID_MISSION_STATUS);
     }
 
+    //가게의 미션 목록 조회
+    public MissionResDto.MissionPreviewListDTO getMissionPreviewList(Long storeId, int page, int size){
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
+
+        Pageable pageable = PageRequest.of(page-1, size);
+        Page<Mission> result = missionRepository.findByStoreId(storeId, pageable);
+
+        return MissionConverter.toMissionPreviewListDTO(result);
+    }
+
+    //미션완료
+    @Transactional
+    public MemberMissionResDto.complete completeMyMission(
+            Long memberId,
+            Long missionId
+    ){
+        MemberMission mm = memberMissionRepository.findByMemberIdAndMissionId(memberId, missionId)
+                .orElseThrow(() -> new MemberMissionException(MemberMissionErrorCode.MEMBER_MISSION_NOT_FOUND));
+
+        if(mm.getStatus() ==  MissionStatus.COMPLETED){
+            throw new MissionException(MissionErrorCode.MISSION_ALREADY_COMPLETED);
+        }
+        if(mm.getStatus() ==  MissionStatus.ABANDONED){
+            throw new MissionException(MissionErrorCode.INVALID_MISSION_STATUS);
+        }
+
+        mm.updateStatus(MissionStatus.COMPLETED);
+
+        int reward = mm.getMission().getReward();
+        Member member = mm.getMember();
+        member.addPoint(reward);
+
+        return MemberMissionConverter.toCompleteDto(mm);
+    }
 }

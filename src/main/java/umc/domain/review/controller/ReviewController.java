@@ -38,13 +38,12 @@ public class ReviewController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-
     @GetMapping("/me")
     public ApiResponse<ReviewResDto.ReviewPreViewListDTO> getMyReviews(
             @RequestParam(required = false) Long storeId,
             @Min(1) @Max(5) @RequestParam(required = false) Integer ratingFilter,
             @ValidPage @RequestParam(defaultValue = "1") Integer page,
-            @Positive @RequestParam (defaultValue = "5") Integer size
+            @Positive @RequestParam (defaultValue = "10") Integer size
     )
     {
         Long memberId = 1L; //스프링 시큐리티로 수정 필요

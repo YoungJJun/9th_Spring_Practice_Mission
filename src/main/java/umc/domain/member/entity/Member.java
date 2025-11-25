@@ -64,5 +64,7 @@ public class Member extends BaseEntity {
     private String nickname;
 
 
-
+    public void addPoint(int reward) {
+        this.point += reward;
+    }
 }

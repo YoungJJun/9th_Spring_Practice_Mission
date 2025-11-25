@@ -13,4 +13,13 @@ public class MemberMissionResDto {
             Long missionId,
             MissionStatus status
     ){}
+
+    //미션 완료시 response dto
+    @Builder
+    public record complete(
+            Long memberMissionId,
+            Long missionId,
+            MissionStatus status,
+            int addedPoint
+    ){}
 }
