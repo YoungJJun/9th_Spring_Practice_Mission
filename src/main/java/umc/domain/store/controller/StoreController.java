@@ -7,6 +7,7 @@ import umc.domain.mission.dto.MissionResDto;
 import umc.domain.mission.service.MissionService;
 import umc.domain.review.dto.ReviewReqDto;
 import umc.domain.review.dto.ReviewResDto;
+import umc.domain.review.exception.code.ReviewSuccessCode;
 import umc.domain.review.service.ReviewService;
 import umc.domain.store.dto.StoreReqDto;
 import umc.domain.store.dto.StoreResDto;
@@ -58,5 +59,16 @@ public class StoreController {
         MissionResDto.SimpleMissionDto result = missionService.createMission(storeId, dto);
 
         return ApiResponse.onSuccess(GeneralSuccessCode.OK, result);
+    }
+
+    //가게의 리뷰 조회
+    @GetMapping("/{storeId}/reviews")
+    public ApiResponse<ReviewResDto.ReviewPreViewListDTO> getReviews(
+            @PathVariable Long storeId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ){
+        ReviewSuccessCode code = ReviewSuccessCode.FOUND;
+        return ApiResponse.onSuccess(code, reviewService.findStoreReview(null,storeId, null, page, size));
     }
 }

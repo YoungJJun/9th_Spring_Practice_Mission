@@ -75,7 +75,7 @@ public class MissionService {
 
         //기존 상태체크
         Optional<MemberMission> mappingOpt =
-                memberMissionRepository.findByMember_IdAndMission_Id(memberId,missionId);
+                memberMissionRepository.findByMemberIdAndMissionId(memberId,missionId);
 
         if(mappingOpt.isEmpty()){ //최초 도전 상황 !!!! 컨버터 적용 필요 !!!!
             MemberMission newChallenge = MemberMission.builder()

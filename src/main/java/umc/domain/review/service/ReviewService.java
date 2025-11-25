@@ -1,6 +1,9 @@
 package umc.domain.review.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import umc.domain.member.entity.Member;
 import umc.domain.member.exception.MemberException;
@@ -10,9 +13,7 @@ import umc.domain.review.converter.ReviewConverter;
 import umc.domain.review.dto.ReviewReqDto;
 import umc.domain.review.dto.ReviewResDto;
 import umc.domain.review.entity.Review;
-import umc.domain.review.entity.ReviewImage;
 import umc.domain.review.repository.ReviewRepository;
-import umc.domain.store.dto.StoreReqDto;
 import umc.domain.store.entity.Store;
 import umc.domain.store.exception.StoreException;
 import umc.domain.store.exception.code.StoreErrorCode;
@@ -27,10 +28,24 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final StoreRepository storeRepository;
+
     public List<ReviewResDto.Detail> getDetailedReviews(Long memberId, Long storeId, Integer ratingFilter) {
-        return ReviewConverter.toReviewResponseDtoList(
+        return ReviewConverter.toReviewResponseDtoListDetail(
                 reviewRepository.searchReview(memberId, storeId, ratingFilter)
         );
+    }
+
+    public ReviewResDto.ReviewPreViewListDTO findStoreReview(Long memberId, Long storeId, Integer ratingFilter,
+                                                             int page, int size) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        Page<Review> result = reviewRepository.findAllByStore(store,pageRequest);
+
+        return ReviewConverter.toReviewPreviewListDTO(result);
+
     }
 
     public ReviewResDto.Detail createReview(ReviewReqDto.Create dto,Long storeId) {
@@ -53,4 +68,16 @@ public class ReviewService {
 
         return ReviewConverter.toReviewResponseDto(review);
     }
+
+    public ReviewResDto.ReviewPreViewListDTO findMyReviews(Long memberId, Long storeId, Integer ratingFilter, Pageable pageable) {
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        Page<Review> result = reviewRepository.findAllByMember(member, pageable);
+
+        return ReviewConverter.toReviewPreviewListDTO(result);
+    }
+
+
 }

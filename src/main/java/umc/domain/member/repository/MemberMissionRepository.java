@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface MemberMissionRepository extends JpaRepository<MemberMission, Long> {
 
-    Optional<MemberMission> findByMember_IdAndMission_Id(Long memberId, Long missionId);
+    Optional<MemberMission> findByMemberIdAndMissionId(Long memberId, Long missionId);
 }
